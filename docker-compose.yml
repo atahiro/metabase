@@ -1,0 +1,15 @@
+metabase:
+  build: ./metabase 
+  ports:
+    - 3000:3000
+  links:
+    - mysql
+mysql:
+  build: ./mysql
+  ports:
+    - 3306:3306
+  volumes:
+    - ./temperature.csv:/temperature.csv
+  environment:
+    - MYSQL_ROOT_PASSWORD=
+    - MYSQL_DATABASE=dht11
