@@ -8,8 +8,7 @@ mysql:
   build: ./mysql
   ports:
     - 3306:3306
-  volumes:
-    - ./temperature.csv:/temperature.csv
   environment:
-    - MYSQL_ROOT_PASSWORD=
+    - MYSQL_ROOT_PASSWORD=$DB_PW
     - MYSQL_DATABASE=dht11
+  command: bash -c "mysql -uroot -p$DB_PW dht11 < create_table.sql"
