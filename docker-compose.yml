@@ -1,14 +1,28 @@
-metabase:
-  build: ./metabase 
-  ports:
-    - 3000:3000
-  links:
-    - mysql
-mysql:
-  build: ./mysql
-  ports:
-    - 3306:3306
-  environment:
-    - MYSQL_ROOT_PASSWORD=$DB_PW
-    - MYSQL_DATABASE=dht11
-  command: bash -c "mysql -uroot -p$DB_PW dht11 < create_table.sql"
+version: '3'
+services:
+  metabase:
+    build: ./metabase 
+    ports:
+      - 80:3000
+    links:
+      - mysql
+    environment:
+      - TZ=Asia/Tokyo
+  mysql:
+    build: ./mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_PW
+      - MYSQL_DATABASE=dht11
+      - TZ=Asia/Tokyo
+  fluentd:
+    build: ./fluentd
+    ports:
+      - 24224:24224
+    volumes:
+      - ./fluentd/td-agent.conf:/fluentd/etc/td-agnet.conf
+    environment:
+      - FLUENTD_CONF=td-agnet.conf
+      - FLUENTD_OPT=
+      - TZ=Asia/Tokyo
